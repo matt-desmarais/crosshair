@@ -9,7 +9,7 @@ if cmd_subfolder not in sys.path:
     sys.path.insert(0, cmd_subfolder)
 
 
-import datetime as dt
+import datetime
 import time
 import picamera
 import numpy as np
