@@ -8,6 +8,7 @@ cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(insp
 if cmd_subfolder not in sys.path:
     sys.path.insert(0, cmd_subfolder)
 
+import datetime as dt
 import time
 import picamera
 import numpy as np
@@ -289,6 +290,7 @@ gui5 = 's/r     = save/revert settings'
 with picamera.PiCamera() as camera:
     camera.resolution = (width, height)
     camera.framerate = 24
+    camera.start_recording('dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S').h264')
     # set this to 1 when switching to fullscreen output
     camera.preview_fullscreen = 1
     #camera.preview_window = (0,0,width,height)
