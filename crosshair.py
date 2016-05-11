@@ -295,6 +295,7 @@ with picamera.PiCamera() as camera:
     camera.resolution = (width, height)
     camera.framerate = 24
     fileName = get_file_name()
+    camera.iso = 800
     camera.start_recording(filename)
     # set this to 1 when switching to fullscreen output
     camera.preview_fullscreen = 1
