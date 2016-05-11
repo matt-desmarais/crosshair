@@ -285,8 +285,8 @@ font = cv2.FONT_HERSHEY_PLAIN
 col = colormap(curcol)
 # create array for a bare metal gui and text:
 gui = np.zeros((height, width, 3), dtype=np.uint8)
-gui1 = 'arrows = move center'
-gui2 = 'c       = cycle color'
+gui1 = 'Don't be a bitch'
+gui2 = 'Go get some kills'
 gui3 = 'p       = cycle pattern'
 gui4 = '+/-    = scale'
 gui5 = 's/r     = save/revert settings'
