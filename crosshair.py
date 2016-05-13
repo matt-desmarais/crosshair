@@ -134,7 +134,7 @@ GPIO.setmode(GPIO.BCM)
 # GPIO 24, 23 & 18 set up as inputs, pulled up to avoid false detection.
 # Both ports are wired to connect to GND on button press.
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # threaded callbacks to run in new thread when button events are detected
@@ -214,7 +214,7 @@ def togglecolor(channel):
     return
 
 GPIO.add_event_detect(24, GPIO.FALLING, callback=toggleonoff, bouncetime=300)
-GPIO.add_event_detect(23, GPIO.FALLING, callback=togglepattern, bouncetime=300)
+GPIO.add_event_detect(14, GPIO.FALLING, callback=togglepattern, bouncetime=300)
 GPIO.add_event_detect(18, GPIO.FALLING, callback=togglecolor, bouncetime=300)
 
 # map text color names to RGB:
