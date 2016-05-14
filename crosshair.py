@@ -254,25 +254,26 @@ def patternswitch(target,guitoggle):
         creategui(gui)
     # cycle through possible patterns:
     if curpat == 1:
-        patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-15, radius, col)
     if curpat == 2:
-        patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-30, radius, col)
     if curpat == 3:
-        patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-45, radius, col)
     if curpat == 4:
-        patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-60, radius, col)
     if curpat == 5:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
     if curpat == 6:
-        patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+15, radius, col)
     if curpat == 7:
-        patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+30, radius, col)
     if curpat == 8:
-        patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+45, radius, col)
     if curpat == 9:
-        patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+60, radius, col)
     if curpat == 10:
-        patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+    
     # Add the overlay directly into layer 3 with transparency;
     # we can omit the size parameter of add_overlay as the
     # size is the same as the camera's resolution
