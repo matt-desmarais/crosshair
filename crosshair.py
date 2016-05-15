@@ -21,6 +21,7 @@ import ConfigParser
 def get_file_name():  # new
     return datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S.h264")
 
+
 # subclass for ConfigParser to add comments for settings
 # (adapted from jcollado's solution on stackoverflow)
 class ConfigParserWithComments(ConfigParser.ConfigParser):
@@ -128,6 +129,7 @@ colors = {
 # initialize toggle for on/off button and gui state:
 togsw = 1
 guivisible = 1
+gunRange = 30
 
 # initialize GPIO and assign buttons:
 GPIO.setmode(GPIO.BCM)
@@ -288,8 +290,8 @@ col = colormap(curcol)
 gui = np.zeros((height, width, 3), dtype=np.uint8)
 gui1 = 'Dont be a bitch'
 gui2 = 'Go get some kills'
-gui3 = 'p       = cycle pattern'
-gui4 = '+/-    = scale'
+gui3 = 'button  = cycle distance'
+gui4 = 'range: '+gunRange
 gui5 = 's/r     = save/revert settings'
 
 with picamera.PiCamera() as camera:
