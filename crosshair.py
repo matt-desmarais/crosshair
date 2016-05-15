@@ -242,8 +242,8 @@ def creategui(target):
     cv2.putText(target, gui2, (10,height-108), font, 2, col, 2)
     cv2.putText(target, gui3, (10,height-78), font, 2, col, 2)
     cv2.putText(target, gui4, (10,height-48), font, 2, col, 2)
-    cv2.putText(target, gui5, (10,height-18), font, 2, col, 2)
-    cv2.putText(target, 'GUI will vanish after 10s', (10,30), font, 2, col, 2)
+    #cv2.putText(target, gui5, (10,height-18), font, 2, col, 2)
+    #cv2.putText(target, 'GUI will vanish after 10s', (10,30), font, 2, col, 2)
     return
 
 # function to construct and draw the overlay, options are "gui" or "ovl" and 0 or 1
@@ -291,7 +291,7 @@ gui = np.zeros((height, width, 3), dtype=np.uint8)
 gui1 = 'Dont be a bitch'
 gui2 = 'Go get some kills'
 gui3 = 'button  = cycle distance'
-gui4 = 'range: '+gunRange
+gui4 = 'range: '+str(gunRange)
 gui5 = 's/r     = save/revert settings'
 
 with picamera.PiCamera() as camera:
@@ -309,7 +309,7 @@ with picamera.PiCamera() as camera:
         # show gui fot 10 seconds:
         patternswitch(gui,1)
         time.sleep(10)
-        guivisible = 0
+        guivisible = 1
         # cycle through possible patterns:
         patternswitch(ovl,0)
         while True:
