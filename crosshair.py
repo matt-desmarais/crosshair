@@ -286,7 +286,7 @@ font = cv2.FONT_HERSHEY_PLAIN
 col = colormap(curcol)
 # create array for a bare metal gui and text:
 gui = np.zeros((height, width, 3), dtype=np.uint8)
-gui1 = 'Don't be a bitch'
+gui1 = 'Dont be a bitch'
 gui2 = 'Go get some kills'
 gui3 = 'p       = cycle pattern'
 gui4 = '+/-    = scale'
@@ -295,7 +295,7 @@ gui5 = 's/r     = save/revert settings'
 with picamera.PiCamera() as camera:
     camera.resolution = (width, height)
     camera.framerate = 24
-    fileName = get_file_name()
+    filename = get_file_name()
     camera.iso = 800
     camera.start_recording(filename)
     # set this to 1 when switching to fullscreen output
