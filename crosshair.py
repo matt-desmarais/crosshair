@@ -257,43 +257,33 @@ def patternswitch(target,guitoggle):
     if curpat == 1:
         patterns.pattern5(target, width, height, xcenter, ycenter-10, radius, col)
         gunRange = 25
-        patternswitch(gui,1)
     if curpat == 2:
         patterns.pattern5(target, width, height, xcenter, ycenter-20, radius, col)
         gunRange = 20
-        patternswitch(gui,1)
     if curpat == 3:
         patterns.pattern5(target, width, height, xcenter, ycenter-30, radius, col)
         gunRange = 15
-        patternswitch(gui,1)
     if curpat == 4:
         patterns.pattern5(target, width, height, xcenter, ycenter-40, radius, col)
         gunRange = 10
-        patternswitch(gui,1)
     if curpat == 5:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
         gunRange = 30
-        patternswitch(gui,1)
     if curpat == 6:
         patterns.pattern5(target, width, height, xcenter, ycenter+10, radius, col)
         gunRange = 40
-        patternswitch(gui,1)
     if curpat == 7:
         patterns.pattern5(target, width, height, xcenter, ycenter+20, radius, col)
         gunRange = 50
-        patternswitch(gui,1)
     if curpat == 8:
         patterns.pattern5(target, width, height, xcenter, ycenter+30, radius, col)
         gunRange = 60
-        patternswitch(gui,1)
     if curpat == 9:
         patterns.pattern5(target, width, height, xcenter, ycenter+40, radius, col)
         gunRange = 70
-        patternswitch(gui,1)
     if curpat == 10:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
         gunRange = 30
-        patternswitch(gui,1)
     
     # Add the overlay directly into layer 3 with transparency;
     # we can omit the size parameter of add_overlay as the
