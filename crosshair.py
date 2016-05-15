@@ -254,23 +254,23 @@ def patternswitch(target,guitoggle):
         creategui(gui)
     # cycle through possible patterns:
     if curpat == 1:
-        patterns.pattern5(target, width, height, xcenter, ycenter-15, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-10, radius, col)
     if curpat == 2:
-        patterns.pattern5(target, width, height, xcenter, ycenter-30, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-20, radius, col)
     if curpat == 3:
-        patterns.pattern5(target, width, height, xcenter, ycenter-45, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-30, radius, col)
     if curpat == 4:
-        patterns.pattern5(target, width, height, xcenter, ycenter-60, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter-40, radius, col)
     if curpat == 5:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
     if curpat == 6:
-        patterns.pattern5(target, width, height, xcenter, ycenter+15, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+10, radius, col)
     if curpat == 7:
-        patterns.pattern5(target, width, height, xcenter, ycenter+30, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+20, radius, col)
     if curpat == 8:
-        patterns.pattern5(target, width, height, xcenter, ycenter+45, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+30, radius, col)
     if curpat == 9:
-        patterns.pattern5(target, width, height, xcenter, ycenter+60, radius, col)
+        patterns.pattern5(target, width, height, xcenter, ycenter+40, radius, col)
     if curpat == 10:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
     
