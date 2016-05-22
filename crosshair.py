@@ -129,6 +129,8 @@ colors = {
 # initialize toggle for on/off button and gui state:
 togsw = 1
 guivisible = 1
+gunRange=30
+
 
 # initialize GPIO and assign buttons:
 GPIO.setmode(GPIO.BCM)
