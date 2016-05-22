@@ -129,7 +129,6 @@ colors = {
 # initialize toggle for on/off button and gui state:
 togsw = 1
 guivisible = 1
-gunRange=0
 
 # initialize GPIO and assign buttons:
 GPIO.setmode(GPIO.BCM)
@@ -293,6 +292,8 @@ def patternswitch(target,guitoggle):
     o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=160)
     return
 
+
+gunRange=30
 # create array for the overlay:
 ovl = np.zeros((height, width, 3), dtype=np.uint8)
 font = cv2.FONT_HERSHEY_PLAIN
