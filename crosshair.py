@@ -292,8 +292,6 @@ def patternswitch(target,guitoggle):
     o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=160)
     return
 
-
-global gunRange
 # create array for the overlay:
 ovl = np.zeros((height, width, 3), dtype=np.uint8)
 font = cv2.FONT_HERSHEY_PLAIN
