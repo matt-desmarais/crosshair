@@ -21,7 +21,6 @@ import ConfigParser
 def get_file_name():  # new
     return datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S.h264")
 
-global gunRange=30
 # subclass for ConfigParser to add comments for settings
 # (adapted from jcollado's solution on stackoverflow)
 class ConfigParserWithComments(ConfigParser.ConfigParser):
@@ -293,7 +292,7 @@ def patternswitch(target,guitoggle):
     return
 
 
-gunRange=30
+global gunRange=30
 # create array for the overlay:
 ovl = np.zeros((height, width, 3), dtype=np.uint8)
 font = cv2.FONT_HERSHEY_PLAIN
