@@ -21,7 +21,7 @@ import ConfigParser
 def get_file_name():  # new
     return datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S.h264")
 
-
+global gunRange=30
 # subclass for ConfigParser to add comments for settings
 # (adapted from jcollado's solution on stackoverflow)
 class ConfigParserWithComments(ConfigParser.ConfigParser):
