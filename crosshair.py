@@ -21,7 +21,8 @@ import ConfigParser
 def get_file_name():  # new
     return datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S.h264")
 
-gunRange=30
+gunRange = 30
+
 # subclass for ConfigParser to add comments for settings
 # (adapted from jcollado's solution on stackoverflow)
 class ConfigParserWithComments(ConfigParser.ConfigParser):
@@ -117,6 +118,7 @@ xcenter = int(config.get('overlay', 'xcenter'))
 ycenter = int(config.get('overlay', 'ycenter'))
 radius = int(config.get('overlay', 'radius'))
 
+curpat2 = 1
 # map colors:
 colors = {
         'white': (255,255,255),
@@ -135,8 +137,8 @@ GPIO.setmode(GPIO.BCM)
 # GPIO 24, 23 & 18 set up as inputs, pulled up to avoid false detection.
 # Both ports are wired to connect to GND on button press.
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # threaded callbacks to run in new thread when button events are detected
 # function to call when top button is pressed (GPIO 24):
@@ -184,6 +186,36 @@ def togglepattern(channel):
             o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
     return
 
+
+def togglepattern2(channel):
+    global togsw,o,curpat2,col,ovl,gui
+    # if overlay is inactive, ignore button:
+    if togsw == 0:
+        print "Pattern button pressed, but ignored --- Crosshair not visible."
+    # if overlay is active, drop it, change pattern, then show it again
+    else:
+        curpat2 += 1
+        print "Set new pattern: " + str(curpat2) 
+        if curpat2 > patterns.maxpat:     # this number must be adjusted to number of available patterns!
+            curpat2 = 1
+        if guivisible == 0:
+            # reinitialize array:
+            ovl = np.zeros((height, width, 3), dtype=np.uint8)
+            patternswitcher(ovl,0)
+            if 'o' in globals():
+                camera.remove_overlay(o)
+            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=160)
+        else:
+            # reinitialize array
+            gui = np.zeros((height, width, 3), dtype=np.uint8)
+            creategui(gui)
+            patternswitcher(gui,1)
+            if 'o' in globals():
+                camera.remove_overlay(o)
+            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
+    return
+
+
 # function to call when low button is pressed (GPIO 18):
 def togglecolor(channel):
     global togsw,o,curcol,col,ovl,gui
@@ -215,8 +247,8 @@ def togglecolor(channel):
     return
 
 GPIO.add_event_detect(24, GPIO.FALLING, callback=toggleonoff, bouncetime=300)
-GPIO.add_event_detect(14, GPIO.FALLING, callback=togglepattern, bouncetime=300)
-GPIO.add_event_detect(18, GPIO.FALLING, callback=togglecolor, bouncetime=300)
+GPIO.add_event_detect(12, GPIO.FALLING, callback=togglepattern, bouncetime=300)
+GPIO.add_event_detect(23, GPIO.FALLING, callback=togglepattern2, bouncetime=300)
 
 # map text color names to RGB:
 def colormap(col):
@@ -240,57 +272,298 @@ def creategui(target):
     cv2.putText(target, gui1, (10,height-138), font, 2, col, 2)
     cv2.putText(target, gui2, (10,height-108), font, 2, col, 2)
     cv2.putText(target, gui3, (10,height-78), font, 2, col, 2)
-    cv2.putText(target, gui4, (10,height-48), font, 2, col, 2)
+    cv2.putText(target, 'range: '+str(gunRange)+'ft', (10,height-48), font, 2, col, 2)
     #cv2.putText(target, gui5, (10,height-18), font, 2, col, 2)
     #cv2.putText(target, 'GUI will vanish after 10s', (10,30), font, 2, col, 2)
     return
 
 # function to construct and draw the overlay, options are "gui" or "ovl" and 0 or 1
 def patternswitch(target,guitoggle):
+    global o, gunRange, ycenter
+    # first remove existing overlay:
+    if 'o' in globals():
+        camera.remove_overlay(o)
+    # cycle through possible patterns:
+    if guitoggle == 1:
+	creategui(gui)
+    if curpat == 1:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+    gunRange = 100
+#	creategui(gui)
+    if curpat == 2:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 110
+#	creategui(gui)
+    if curpat == 3:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 120
+    if curpat == 4:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 30
+    if curpat == 5:
+	ycenter = int(config.get('overlay', 'ycenter'))
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 40
+    if curpat == 6:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 50
+    if curpat == 7:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 60
+    if curpat == 8:
+	ycenter = ycenter+8
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 70
+    if curpat == 9:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 80
+    if curpat == 10:
+	ycenter = ycenter+10
+        if curpat2 == 1:
+            patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 2:
+            patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 3:
+            patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 4:
+            patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 5:
+            patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 6:
+            patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 7:
+            patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 8:
+            patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 9:
+            patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+        if curpat2 == 10:
+            patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
+        gunRange = 90
+
+    # Add the overlay directly into layer 3 with transparency;
+    # we can omit the size parameter of add_overlay as the
+    # size is the same as the camera's resolution
+    o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=160)
+    return
+
+
+############################################################
+
+def patternswitcher(target,guitoggle):
     global o
     # first remove existing overlay:
     if 'o' in globals():
         camera.remove_overlay(o)
     if guitoggle == 1:
         creategui(gui)
-    if curpat == 1:
-        patterns.pattern5(target, width, height, xcenter, ycenter+60, radius, col)
-        gunRange = 100
-#       creategui(gui)
-    if curpat == 2:
-        patterns.pattern5(target, width, height, xcenter, ycenter+70, radius, col)
-        gunRange = 110
-#       creategui(gui)
-    if curpat == 3:
-        patterns.pattern5(target, width, height, xcenter, ycenter+80, radius, col)
-        gunRange = 120
-    if curpat == 4:
-        patterns.pattern5(target, width, height, xcenter, ycenter+90, radius, col)
-        gunRange = 30
-    if curpat == 5:
+    # cycle through possible patterns:
+    if curpat2 == 1:
+        patterns.pattern1(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 2:
+        patterns.pattern2(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 3:
+        patterns.pattern3(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 4:
+        patterns.pattern4(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 5:
         patterns.pattern5(target, width, height, xcenter, ycenter, radius, col)
-        gunRange = 40
-    if curpat == 6:
-        patterns.pattern5(target, width, height, xcenter, ycenter+10, radius, col)
-        gunRange = 50
-    if curpat == 7:
-        patterns.pattern5(target, width, height, xcenter, ycenter+20, radius, col)
-        gunRange = 60
-    if curpat == 8:
-        patterns.pattern5(target, width, height, xcenter, ycenter+30, radius, col)
-        gunRange = 70
-    if curpat == 9:
-        patterns.pattern5(target, width, height, xcenter, ycenter+40, radius, col)
-        gunRange = 80
-    if curpat == 10:
-        patterns.pattern5(target, width, height, xcenter, ycenter+50, radius, col)
-        gunRange = 90
-    
+    if curpat2 == 6:
+        patterns.pattern6(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 7:
+        patterns.pattern7(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 8:
+        patterns.pattern8(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 9:
+        patterns.pattern9(target, width, height, xcenter, ycenter, radius, col)
+    if curpat2 == 10:
+        patterns.pattern10(target, width, height, xcenter, ycenter, radius, col)
     # Add the overlay directly into layer 3 with transparency;
     # we can omit the size parameter of add_overlay as the
     # size is the same as the camera's resolution
     o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=160)
     return
+
+
+############################################################
 
 # create array for the overlay:
 ovl = np.zeros((height, width, 3), dtype=np.uint8)
@@ -298,8 +571,8 @@ font = cv2.FONT_HERSHEY_PLAIN
 col = colormap(curcol)
 # create array for a bare metal gui and text:
 gui = np.zeros((height, width, 3), dtype=np.uint8)
-gui1 = 'Dont be a bitch'
-gui2 = 'Go get some kills'
+gui1 = 'Airsoft Landwarrior'
+gui2 = 'Version 0.1 alpha'
 gui3 = 'button  = cycle distance'
 gui4 = 'range: '+str(gunRange)
 gui5 = 's/r     = save/revert settings'
@@ -308,8 +581,13 @@ with picamera.PiCamera() as camera:
     camera.resolution = (width, height)
     camera.framerate = 24
     filename = get_file_name()
-    camera.iso = 0
-    camera.start_recording(filename)
+    camera.exposure = 'off'
+    camera.iso = 800
+    camera.awb = 'off'
+    camera.meter_mode='matrix'
+#    camera.brightness = 70
+#    camera.contrast = 50
+#    camera.start_recording(filename)
     # set this to 1 when switching to fullscreen output
     camera.preview_fullscreen = 1
     #camera.preview_window = (0,0,width,height)
@@ -324,7 +602,6 @@ with picamera.PiCamera() as camera:
         patternswitch(ovl,0)
         while True:
             time.sleep(1)
-            patternswitch(gui,1)
     finally:
         camera.close()               # clean up camera
         GPIO.cleanup()               # clean up GPIO

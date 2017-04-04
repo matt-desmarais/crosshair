@@ -107,9 +107,9 @@ def pattern4( arr, width, height, x, y, rad, col ):
 
 # pattern5: simple crosshair with one circle (no ticks)
 def pattern5( arr, width, height, x, y, rad, col ):
-    cv2.line(arr,(0,y),(width,y),col,1)
-    cv2.line(arr,(x,0),(x,height),col,1)
-    cv2.circle(arr,(x,y),rad,col,1)
+    cv2.line(arr,(0,y),(width,y),col,2)
+    cv2.line(arr,(x,0),(x,height),col,2)
+    cv2.circle(arr,(x,y),rad,col,2)
     return    
 
 # pattern6: simple circle
