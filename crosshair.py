@@ -22,6 +22,7 @@ def get_file_name():  # new
     return datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S.h264")
 
 gunRange = 30
+alphaValue = 64
 
 # subclass for ConfigParser to add comments for settings
 # (adapted from jcollado's solution on stackoverflow)
@@ -143,7 +144,7 @@ GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # threaded callbacks to run in new thread when button events are detected
 # function to call when top button is pressed (GPIO 24):
 def toggleonoff(channel):
-    global togsw,o
+    global togsw,o,alphaValue
     if togsw == 1:
         print "Toggle Crosshair OFF"
         camera.remove_overlay(o)
@@ -151,15 +152,15 @@ def toggleonoff(channel):
     else:
         print "Toggle Crosshair ON"
         if guivisible == 0:
-            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=alphaValue)
         else:
-            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=alphaValue)
         togsw = 1
     return
 
 # function to call when middle button is pressed (GPIO 23):
 def togglepattern(channel):
-    global togsw,o,curpat,col,ovl,gui
+    global togsw,o,curpat,col,ovl,gui,alphaValue
     # if overlay is inactive, ignore button:
     if togsw == 0:
         print "Pattern button pressed, but ignored --- Crosshair not visible."
@@ -175,7 +176,7 @@ def togglepattern(channel):
             patternswitch(ovl,0)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=alphaValue)
         else:
             # reinitialize array
             gui = np.zeros((height, width, 3), dtype=np.uint8)
@@ -183,12 +184,12 @@ def togglepattern(channel):
             patternswitch(gui,1)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=alphaValue)
     return
 
 
 def togglepattern2(channel):
-    global togsw,o,curpat2,col,ovl,gui
+    global togsw,o,curpat2,col,ovl,gui,alphaValue
     # if overlay is inactive, ignore button:
     if togsw == 0:
         print "Pattern button pressed, but ignored --- Crosshair not visible."
@@ -204,7 +205,7 @@ def togglepattern2(channel):
             patternswitcher(ovl,0)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=alphaValue)
         else:
             # reinitialize array
             gui = np.zeros((height, width, 3), dtype=np.uint8)
@@ -212,13 +213,13 @@ def togglepattern2(channel):
             patternswitcher(gui,1)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=alphaValue)
     return
 
 
 # function to call when low button is pressed (GPIO 18):
 def togglecolor(channel):
-    global togsw,o,curcol,col,ovl,gui
+    global togsw,o,curcol,col,ovl,gui,alphaValue
     # step up the color to next in list
     curcol = colorcycle(colors,curcol)
     # map colorname to RGB value for new color
@@ -235,7 +236,7 @@ def togglecolor(channel):
             patternswitch(ovl,0)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(ovl), layer=3, alpha=alphaValue)
         else:
             # reinitialize array
             gui = np.zeros((height, width, 3), dtype=np.uint8)
@@ -243,7 +244,7 @@ def togglecolor(channel):
             patternswitch(gui,1)
             if 'o' in globals():
                 camera.remove_overlay(o)
-            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=160)
+            o = camera.add_overlay(np.getbuffer(gui), layer=3, alpha=alphaValue)
     return
 
 GPIO.add_event_detect(24, GPIO.FALLING, callback=toggleonoff, bouncetime=300)
@@ -279,7 +280,7 @@ def creategui(target):
 
 # function to construct and draw the overlay, options are "gui" or "ovl" and 0 or 1
 def patternswitch(target,guitoggle):
-    global o, gunRange, ycenter
+    global o, gunRange, ycenter, alphaValue
     # first remove existing overlay:
     if 'o' in globals():
         camera.remove_overlay(o)
@@ -522,7 +523,7 @@ def patternswitch(target,guitoggle):
     # Add the overlay directly into layer 3 with transparency;
     # we can omit the size parameter of add_overlay as the
     # size is the same as the camera's resolution
-    o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=160)
+    o = camera.add_overlay(np.getbuffer(target), layer=3, alpha=alphaValue)
     return
 
 
